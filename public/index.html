@@ -1,111 +1,1054 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Cypher — Streaming Premium</title>
+  <title>MOBIE — Premium Streaming</title>
   <link rel="icon" type="image/png" href="https://www.pelisplushd.la/static/img/favicon.png">
   
-  <!-- Ionicons -->
-  <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
-  <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   
-  <link rel="stylesheet" href="style.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --primary-color: #e50914;
+      --secondary-color: #564d4d;
+      --dark-bg: #141414;
+      --card-bg: #2f2f2f;
+      --text-primary: #ffffff;
+      --text-secondary: #808080;
+      --accent-hover: #f5b800;
+      --transition: all 0.3s ease;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: var(--dark-bg);
+      color: var(--text-primary);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* ===== NAVBAR ===== */
+    .netflix-navbar {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: linear-gradient(180deg, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0) 100%);
+      backdrop-filter: blur(8px);
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+      transition: background 0.3s ease;
+    }
+
+    .netflix-navbar.scrolled {
+      background: rgba(20, 20, 20, 0.95);
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .nav-left {
+      display: flex;
+      align-items: center;
+      gap: 3rem;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      cursor: pointer;
+      transition: transform 0.3s ease;
+    }
+
+    .brand:hover {
+      transform: scale(1.05);
+    }
+
+    .brand h1 {
+      font-size: 1.8rem;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+    }
+
+    .brand span {
+      color: var(--primary-color);
+    }
+
+    .brand-icon {
+      font-size: 1.8rem;
+      color: var(--primary-color);
+    }
+
+    .nav-links {
+      display: flex;
+      list-style: none;
+      gap: 2rem;
+    }
+
+    .nav-links li {
+      position: relative;
+    }
+
+    .nav-links a {
+      color: var(--text-primary);
+      text-decoration: none;
+      font-weight: 500;
+      font-size: 0.95rem;
+      cursor: pointer;
+      transition: color 0.3s ease;
+    }
+
+    .nav-links a:hover,
+    .nav-links li.active a {
+      color: var(--primary-color);
+    }
+
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+    }
+
+    .search-container {
+      position: relative;
+    }
+
+    .search-form {
+      display: flex;
+      align-items: center;
+    }
+
+    .search-box-wrapper {
+      position: relative;
+      display: flex;
+      align-items: center;
+      background: rgba(255,255,255,0.1);
+      border-radius: 4px;
+      padding: 0.5rem 1rem;
+      border: 1px solid rgba(255,255,255,0.2);
+      transition: all 0.3s ease;
+    }
+
+    .search-box-wrapper:focus-within {
+      background: rgba(255,255,255,0.15);
+      border-color: var(--primary-color);
+      box-shadow: 0 0 10px rgba(229,9,20,0.3);
+    }
+
+    .search-icon {
+      margin-right: 0.5rem;
+      color: var(--text-secondary);
+      font-size: 0.95rem;
+    }
+
+    #search-input {
+      background: transparent;
+      border: none;
+      color: var(--text-primary);
+      outline: none;
+      width: 200px;
+      font-size: 0.9rem;
+    }
+
+    #search-input::placeholder {
+      color: var(--text-secondary);
+    }
+
+    .api-status-badge {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.4rem 0.8rem;
+      background: rgba(34, 177, 76, 0.2);
+      border: 1px solid rgba(34, 177, 76, 0.5);
+      border-radius: 4px;
+      font-size: 0.8rem;
+      font-weight: 500;
+    }
+
+    .status-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #22b14c;
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.5; }
+    }
+
+    .btn-icon {
+      background: transparent;
+      border: none;
+      color: var(--text-primary);
+      cursor: pointer;
+      font-size: 1.2rem;
+      transition: color 0.3s ease;
+      padding: 0.5rem;
+    }
+
+    .btn-icon:hover {
+      color: var(--primary-color);
+    }
+
+    /* ===== HERO BANNER ===== */
+    .hero-banner {
+      height: 600px;
+      background-size: cover;
+      background-position: center;
+      position: relative;
+      display: flex;
+      align-items: flex-end;
+      overflow: hidden;
+    }
+
+    .hero-banner::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(
+        to right,
+        rgba(0,0,0,0.8) 0%,
+        rgba(0,0,0,0.4) 50%,
+        rgba(0,0,0,0)
+      );
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      padding: 3rem;
+      max-width: 500px;
+    }
+
+    .hero-type-badge {
+      display: inline-block;
+      background: var(--primary-color);
+      padding: 0.5rem 1rem;
+      border-radius: 4px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 1px;
+      margin-bottom: 1rem;
+    }
+
+    .hero-title {
+      font-size: 3.5rem;
+      font-weight: 900;
+      margin-bottom: 1.5rem;
+      line-height: 1.2;
+      letter-spacing: -1px;
+    }
+
+    .hero-meta-row {
+      display: flex;
+      gap: 2rem;
+      margin-bottom: 1.5rem;
+      align-items: center;
+    }
+
+    .hero-meta-item {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 1rem;
+      color: var(--text-secondary);
+    }
+
+    .hero-meta-item i {
+      color: var(--primary-color);
+      font-size: 1.2rem;
+    }
+
+    .hero-synopsis {
+      font-size: 1rem;
+      line-height: 1.6;
+      margin-bottom: 2rem;
+      color: #ccc;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 1rem;
+    }
+
+    .btn-hero {
+      padding: 0.8rem 2rem;
+      border: none;
+      border-radius: 4px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      transition: all 0.3s ease;
+      letter-spacing: 0.5px;
+    }
+
+    .btn-hero.play {
+      background: var(--primary-color);
+      color: white;
+    }
+
+    .btn-hero.play:hover {
+      background: #c40812;
+      transform: scale(1.05);
+      box-shadow: 0 8px 24px rgba(229,9,20,0.4);
+    }
+
+    .btn-hero.info {
+      background: rgba(255,255,255,0.25);
+      color: white;
+    }
+
+    .btn-hero.info:hover {
+      background: rgba(255,255,255,0.4);
+      transform: scale(1.05);
+    }
+
+    .btn-hero i {
+      font-size: 1.2rem;
+    }
+
+    /* ===== CAROUSEL SECTIONS ===== */
+    .carousel-section {
+      padding: 2rem 0;
+    }
+
+    .carousel-row {
+      margin-bottom: 3rem;
+      padding: 0 2rem;
+    }
+
+    .carousel-row h2 {
+      font-size: 1.5rem;
+      margin-bottom: 1.5rem;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+    }
+
+    .carousel-container {
+      display: flex;
+      gap: 1rem;
+      overflow-x: auto;
+      scroll-behavior: smooth;
+      padding-bottom: 1rem;
+    }
+
+    .carousel-container::-webkit-scrollbar {
+      height: 8px;
+    }
+
+    .carousel-container::-webkit-scrollbar-track {
+      background: rgba(255,255,255,0.1);
+      border-radius: 4px;
+    }
+
+    .carousel-container::-webkit-scrollbar-thumb {
+      background: var(--primary-color);
+      border-radius: 4px;
+    }
+
+    /* ===== CARDS ===== */
+    .card {
+      min-width: 180px;
+      height: 270px;
+      background: var(--card-bg);
+      border-radius: 4px;
+      overflow: hidden;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      position: relative;
+      flex-shrink: 0;
+    }
+
+    .card:hover {
+      transform: scale(1.08);
+      box-shadow: 0 8px 24px rgba(229,9,20,0.4);
+      z-index: 10;
+    }
+
+    .card img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .card-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0,0,0,0.6);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .card:hover .card-overlay {
+      opacity: 1;
+    }
+
+    .card-overlay-content {
+      text-align: center;
+      color: white;
+    }
+
+    .card-overlay-content i {
+      font-size: 2.5rem;
+      margin-bottom: 0.5rem;
+      color: var(--primary-color);
+    }
+
+    .card-overlay-content p {
+      font-size: 0.9rem;
+      font-weight: 600;
+    }
+
+    /* ===== SKELETON LOADING ===== */
+    .skeleton-row {
+      display: flex;
+      gap: 1rem;
+    }
+
+    .skeleton-card {
+      min-width: 180px;
+      height: 270px;
+      background: linear-gradient(
+        90deg,
+        var(--card-bg) 25%,
+        rgba(255,255,255,0.1) 50%,
+        var(--card-bg) 75%
+      );
+      background-size: 200% 100%;
+      border-radius: 4px;
+      animation: skeleton-load 1.5s infinite;
+    }
+
+    @keyframes skeleton-load {
+      0% {
+        background-position: 200% 0;
+      }
+      100% {
+        background-position: -200% 0;
+      }
+    }
+
+    /* ===== GRID VIEW ===== */
+    .grid-view {
+      padding: 2rem;
+      min-height: 100vh;
+    }
+
+    .filter-toolbar {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 4px;
+      padding: 1.5rem;
+      margin-bottom: 2rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1.5rem;
+      align-items: center;
+    }
+
+    .filter-group {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .filter-chip {
+      padding: 0.6rem 1.2rem;
+      background: transparent;
+      border: 1px solid rgba(255,255,255,0.3);
+      color: var(--text-primary);
+      border-radius: 20px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-weight: 500;
+      font-size: 0.9rem;
+    }
+
+    .filter-chip:hover,
+    .filter-chip.active {
+      background: var(--primary-color);
+      border-color: var(--primary-color);
+    }
+
+    .filter-select {
+      padding: 0.6rem 1rem;
+      background: var(--card-bg);
+      border: 1px solid rgba(255,255,255,0.2);
+      color: var(--text-primary);
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 0.9rem;
+      transition: all 0.3s ease;
+    }
+
+    .filter-select:focus {
+      outline: none;
+      border-color: var(--primary-color);
+      box-shadow: 0 0 10px rgba(229,9,20,0.3);
+    }
+
+    .filter-select option {
+      background: var(--dark-bg);
+      color: var(--text-primary);
+    }
+
+    .grid-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 2rem;
+    }
+
+    .grid-header h2 {
+      font-size: 1.8rem;
+      font-weight: 700;
+    }
+
+    .results-count {
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+    }
+
+    .catalog-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+    }
+
+    /* ===== DETAILS PANEL ===== */
+    .details-panel {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0,0,0,0.3);
+      backdrop-filter: blur(4px);
+      z-index: 200;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+      overflow-y: auto;
+    }
+
+    .details-panel.hidden {
+      display: none;
+    }
+
+    .details-content {
+      background: var(--dark-bg);
+      border-radius: 8px;
+      width: 100%;
+      max-width: 800px;
+      max-height: 85vh;
+      overflow-y: auto;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.8);
+      position: relative;
+    }
+
+    .btn-close-modal {
+      position: absolute;
+      top: 1.5rem;
+      right: 1.5rem;
+      background: rgba(0,0,0,0.7);
+      border: none;
+      color: var(--text-primary);
+      font-size: 1.5rem;
+      cursor: pointer;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s ease;
+      z-index: 210;
+    }
+
+    .btn-close-modal:hover {
+      background: var(--primary-color);
+      transform: scale(1.1);
+    }
+
+    .details-header-card {
+      display: flex;
+      gap: 2rem;
+      padding: 2rem;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+    }
+
+    .details-poster {
+      width: 150px;
+      height: 225px;
+      border-radius: 4px;
+      object-fit: cover;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+    }
+
+    .details-meta-info {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .media-type-badge {
+      display: inline-block;
+      background: var(--primary-color);
+      padding: 0.4rem 0.8rem;
+      border-radius: 4px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 1px;
+      width: fit-content;
+      margin-bottom: 1rem;
+    }
+
+    #details-title {
+      font-size: 2rem;
+      font-weight: 900;
+      margin-bottom: 0.5rem;
+      letter-spacing: -0.5px;
+    }
+
+    .subtext {
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+      margin-bottom: 1rem;
+    }
+
+    .meta-row {
+      display: flex;
+      gap: 2rem;
+      margin-bottom: 1rem;
+    }
+
+    .meta-item {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.95rem;
+    }
+
+    .meta-item i {
+      color: var(--primary-color);
+      font-size: 1.1rem;
+    }
+
+    .details-genres {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-top: 1rem;
+    }
+
+    .genre-badge {
+      background: rgba(255,255,255,0.1);
+      padding: 0.3rem 0.8rem;
+      border-radius: 4px;
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+    }
+
+    .details-section {
+      padding: 1.5rem 2rem;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+    }
+
+    .details-section h4 {
+      font-size: 1.1rem;
+      margin-bottom: 1rem;
+      font-weight: 700;
+    }
+
+    .synopsis-text {
+      color: #aaa;
+      line-height: 1.7;
+    }
+
+    /* ===== BUTTONS ===== */
+    button {
+      font-family: inherit;
+    }
+
+    .btn-primary {
+      padding: 0.8rem 2rem;
+      background: var(--primary-color);
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.3s ease;
+    }
+
+    .btn-primary:hover {
+      background: #c40812;
+      transform: scale(1.05);
+    }
+
+    .btn-secondary {
+      padding: 0.8rem 2rem;
+      background: transparent;
+      color: var(--text-primary);
+      border: 1px solid rgba(255,255,255,0.3);
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.3s ease;
+    }
+
+    .btn-secondary:hover {
+      border-color: var(--primary-color);
+      color: var(--primary-color);
+    }
+
+    /* ===== LOADING & EMPTY STATES ===== */
+    .loading-state {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 3rem;
+      color: var(--text-secondary);
+    }
+
+    .spinner {
+      width: 40px;
+      height: 40px;
+      border: 3px solid rgba(255,255,255,0.1);
+      border-top: 3px solid var(--primary-color);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      margin-bottom: 1rem;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 3rem;
+      color: var(--text-secondary);
+    }
+
+    .empty-state i {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+      color: var(--primary-color);
+    }
+
+    /* ===== DOWNLOADS PANEL ===== */
+    .downloads-panel {
+      position: fixed;
+      right: 0;
+      top: 0;
+      bottom: 0;
+      width: 350px;
+      background: var(--dark-bg);
+      border-left: 1px solid rgba(255,255,255,0.1);
+      z-index: 150;
+      display: flex;
+      flex-direction: column;
+      transform: translateX(100%);
+      transition: transform 0.3s ease;
+    }
+
+    .downloads-panel.open {
+      transform: translateX(0);
+    }
+
+    .downloads-header {
+      padding: 1.5rem;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .downloads-header h2 {
+      font-size: 1.2rem;
+      font-weight: 700;
+    }
+
+    .downloads-list {
+      flex: 1;
+      overflow-y: auto;
+      padding: 1.5rem;
+    }
+
+    .downloads-empty {
+      text-align: center;
+      color: var(--text-secondary);
+      padding: 2rem 0;
+    }
+
+    .downloads-empty i {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+      color: var(--primary-color);
+    }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 1024px) {
+      .hero-title {
+        font-size: 2.5rem;
+      }
+
+      .hero-content {
+        max-width: 400px;
+      }
+
+      .nav-links {
+        gap: 1.5rem;
+      }
+
+      #search-input {
+        width: 150px;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .nav-left {
+        gap: 1.5rem;
+      }
+
+      .nav-links {
+        gap: 1rem;
+        font-size: 0.85rem;
+      }
+
+      .hero-banner {
+        height: 400px;
+      }
+
+      .hero-content {
+        padding: 2rem;
+        max-width: 300px;
+      }
+
+      .hero-title {
+        font-size: 2rem;
+      }
+
+      .hero-synopsis {
+        font-size: 0.9rem;
+      }
+
+      .hero-actions {
+        flex-direction: column;
+      }
+
+      .btn-hero {
+        width: 100%;
+        justify-content: center;
+      }
+
+      .carousel-row {
+        padding: 0 1rem;
+      }
+
+      .card {
+        min-width: 140px;
+        height: 210px;
+      }
+
+      .filter-toolbar {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .filter-group {
+        width: 100%;
+      }
+
+      .filter-select,
+      .filter-chip {
+        width: 100%;
+      }
+
+      .catalog-grid {
+        grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+        gap: 1rem;
+      }
+
+      .details-panel {
+        padding: 1rem;
+      }
+
+      .details-content {
+        max-width: 100%;
+      }
+
+      .details-header-card {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+      }
+
+      .downloads-panel {
+        width: 100%;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .netflix-navbar {
+        padding: 0.75rem 1rem;
+      }
+
+      .brand h1 {
+        font-size: 1.4rem;
+      }
+
+      .nav-links {
+        display: none;
+      }
+
+      .search-box-wrapper {
+        padding: 0.4rem 0.8rem;
+      }
+
+      #search-input {
+        width: 100px;
+      }
+
+      .hero-title {
+        font-size: 1.5rem;
+      }
+
+      .carousel-row h2 {
+        font-size: 1.2rem;
+      }
+
+      .card {
+        min-width: 130px;
+        height: 195px;
+      }
+
+      .hero-content {
+        padding: 1.5rem;
+      }
+
+      #details-title {
+        font-size: 1.5rem;
+      }
+    }
+
+    .hidden {
+      display: none !important;
+    }
+  </style>
 </head>
 <body>
-  <!-- Glassmorphic Background Shapes -->
-  <div class="bg-shape shape-1"></div>
-  <div class="bg-shape shape-2"></div>
-
-  <!-- Drawer Backdrop Blur -->
-  <div class="drawer-backdrop" id="drawer-backdrop"></div>
-
-  <!-- --- Netflix Sticky Navigation Bar --- -->
+  <!-- NAVBAR -->
   <nav class="netflix-navbar" id="netflix-navbar">
     <div class="nav-left">
       <div class="brand" id="brand-logo">
-        <ion-icon name="videocam" class="brand-icon"></ion-icon>
-        <h1>Cy<span>pher</span></h1>
+        <i class="fas fa-play-circle"></i>
+        <h1>MOB<span>IE</span></h1>
       </div>
       <ul class="nav-links">
-        <li class="active" id="nav-item-home"><a id="nav-link-home">Inicio</a></li>
-        <li id="nav-item-movies"><a class="filter-tab" data-type="movie">Películas</a></li>
-        <li id="nav-item-series"><a class="filter-tab" data-type="series">Series</a></li>
+        <li class="active" id="nav-item-home"><a id="nav-link-home">Home</a></li>
+        <li id="nav-item-movies"><a class="filter-tab" data-type="movie">Movies</a></li>
+        <li id="nav-item-series"><a class="filter-tab" data-type="series">TV Shows</a></li>
         <li id="nav-item-anime"><a class="filter-tab" data-type="anime">Anime</a></li>
       </ul>
     </div>
     
     <div class="nav-right">
-      <!-- Expanded Search Box -->
       <div class="search-container">
         <form id="search-form" class="search-form">
           <div class="search-box-wrapper">
-            <ion-icon name="search-outline" class="search-icon"></ion-icon>
-            <input type="text" id="search-input" placeholder="Buscar películas, series..." required>
-            <button type="submit" class="btn-search-submit"></button>
+            <i class="fas fa-search search-icon"></i>
+            <input type="text" id="search-input" placeholder="Search movies, shows..." required>
           </div>
         </form>
       </div>
 
-      <!-- API Status -->
       <div class="api-status-badge online" id="status-badge">
         <span class="status-dot"></span>
         <span class="status-text">Online</span>
       </div>
 
-      <!-- Downloads Toggle Button (Deprioritized & mini) -->
-      <button class="btn-downloads-toggle mini" id="btn-downloads-toggle" title="Gestor de Descargas">
-        <ion-icon name="cloud-download-outline"></ion-icon>
-        <span class="downloads-badge" id="downloads-badge" style="display: none;">0</span>
+      <button class="btn-icon" id="btn-downloads-toggle" title="Download Manager">
+        <i class="fas fa-cloud-download-alt"></i>
       </button>
     </div>
   </nav>
 
-  <!-- --- HOME VIEW (Hero Banner + Horizontal Rows) --- -->
-  <main id="home-view" class="animate-fade-in">
-    <!-- Featured Hero Section -->
+  <!-- HOME VIEW -->
+  <main id="home-view">
+    <!-- HERO BANNER -->
     <section class="hero-banner" id="hero-banner" style="background-image: url('https://images.unsplash.com/photo-1536440136628-849c177e76a1?q=80&w=1600');">
       <div class="hero-content">
-        <span class="hero-type-badge" id="hero-type">PELÍCULA RECOMENDADA</span>
-        <h2 class="hero-title" id="hero-title">El Caballero Oscuro</h2>
+        <span class="hero-type-badge" id="hero-type">RECOMMENDED MOVIE</span>
+        <h2 class="hero-title" id="hero-title">The Dark Knight</h2>
         
         <div class="hero-meta-row">
           <div class="hero-meta-item rating">
-            <ion-icon name="star"></ion-icon>
+            <i class="fas fa-star"></i>
             <span id="hero-rating">9.0</span>
           </div>
           <div class="hero-meta-item">
-            <ion-icon name="calendar-outline"></ion-icon>
+            <i class="fas fa-calendar-alt"></i>
             <span id="hero-year">2008</span>
           </div>
         </div>
 
         <p class="hero-synopsis" id="hero-synopsis">
-          Batman se enfrenta al Joker, un criminal de mente retorcida que desata el caos en Gotham City. El Caballero Oscuro debe aceptar una de las mayores pruebas psicológicas y físicas de su lucha contra la injusticia.
+          Batman faces off against the Joker, a criminal mastermind who plunges Gotham City into chaos. The Dark Knight must accept one of the greatest psychological and physical tests in his battle against injustice.
         </p>
 
         <div class="hero-actions">
           <button class="btn-hero play" id="hero-play-btn">
-            <ion-icon name="play-sharp"></ion-icon>
-            <span>Ver Ahora</span>
+            <i class="fas fa-play"></i>
+            <span>Watch Now</span>
           </button>
           <button class="btn-hero info" id="hero-info-btn">
-            <ion-icon name="information-circle-outline"></ion-icon>
-            <span>Más Información</span>
+            <i class="fas fa-info-circle"></i>
+            <span>More Info</span>
           </button>
         </div>
       </div>
-      <!-- Hero Carousel Indicators -->
-      <div class="hero-dots" id="hero-dots"></div>
     </section>
 
-    <!-- Content Carousels Container -->
-    <section class="view-container carousel-section" id="carousel-section-container">
-      <!-- Carousel Row 1: Movies -->
+    <!-- CAROUSELS -->
+    <section class="carousel-section" id="carousel-section-container">
+      <!-- Movies -->
       <div class="carousel-row">
-        <h2>Películas Destacadas</h2>
+        <h2>Trending Movies</h2>
         <div class="carousel-container" id="carousel-movies">
-          <!-- Skeleton Loading state -->
           <div class="skeleton-row">
             <div class="skeleton-card"></div>
             <div class="skeleton-card"></div>
@@ -117,9 +1060,9 @@
         </div>
       </div>
 
-      <!-- Carousel Row 2: Series -->
+      <!-- TV Shows -->
       <div class="carousel-row">
-        <h2>Series del Momento</h2>
+        <h2>Popular Shows</h2>
         <div class="carousel-container" id="carousel-series">
           <div class="skeleton-row">
             <div class="skeleton-card"></div>
@@ -132,9 +1075,9 @@
         </div>
       </div>
 
-      <!-- Carousel Row 3: Anime -->
+      <!-- Anime -->
       <div class="carousel-row">
-        <h2>Anime Recomendado</h2>
+        <h2>Top Anime</h2>
         <div class="carousel-container" id="carousel-anime">
           <div class="skeleton-row">
             <div class="skeleton-card"></div>
@@ -149,30 +1092,25 @@
     </section>
   </main>
 
-  <!-- --- GRID VIEW (Search / Full Categories / Filtering) --- -->
-  <section class="view-container grid-section hidden" id="grid-view">
-    <!-- Filter Toolbar - Sticky below navbar -->
+  <!-- GRID VIEW -->
+  <section class="grid-view hidden" id="grid-view">
     <div class="filter-toolbar" id="filter-toolbar">
-      <!-- Type Chips -->
       <div class="filter-group">
-        <button class="filter-chip active" data-type="all">Todos</button>
-        <button class="filter-chip" data-type="movie">🎬 Películas</button>
-        <button class="filter-chip" data-type="series">📺 Series</button>
-        <button class="filter-chip" data-type="anime">⛩️ Anime</button>
+        <button class="filter-chip active" data-type="all">All</button>
+        <button class="filter-chip" data-type="movie"><i class="fas fa-film"></i> Movies</button>
+        <button class="filter-chip" data-type="series"><i class="fas fa-tv"></i> Shows</button>
+        <button class="filter-chip" data-type="anime"><i class="fas fa-torii-gate"></i> Anime</button>
       </div>
       
-      <!-- Genre Selector -->
       <div class="filter-group">
         <select id="genre-filter" class="filter-select">
-          <option value="">Todos los Géneros</option>
-          <!-- Populated dynamically -->
+          <option value="">All Genres</option>
         </select>
       </div>
       
-      <!-- Rating Selector -->
       <div class="filter-group">
         <select id="rating-filter" class="filter-select">
-          <option value="">Cualquier Rating</option>
+          <option value="">Any Rating</option>
           <option value="9">⭐ 9.0+</option>
           <option value="8">⭐ 8.0+</option>
           <option value="7">⭐ 7.0+</option>
@@ -181,12 +1119,11 @@
         </select>
       </div>
 
-      <!-- Sort Filter -->
       <div class="filter-group">
         <select id="sort-filter" class="filter-select">
-          <option value="default">Ordenar por: Defecto</option>
-          <option value="rating-desc">⭐ Mejor Rating</option>
-          <option value="rating-asc">Rating Bajo → Alto</option>
+          <option value="default">Sort by: Default</option>
+          <option value="rating-desc">⭐ Highest Rating</option>
+          <option value="rating-asc">⭐ Lowest Rating</option>
           <option value="title-asc">A → Z</option>
           <option value="title-desc">Z → A</option>
         </select>
@@ -194,149 +1131,106 @@
     </div>
 
     <div class="grid-header">
-      <h2 id="results-title">Resultados de Búsqueda</h2>
+      <h2 id="results-title">Search Results</h2>
       <span class="results-count" id="results-count">0 items</span>
     </div>
     
-    <!-- Loading State -->
     <div class="loading-state hidden" id="results-loading">
       <div class="spinner"></div>
-      <p>Scrapeando servidores de contenido...</p>
+      <p>Loading content...</p>
     </div>
 
-    <!-- Empty / Error State -->
-    <div class="downloads-empty hidden" id="results-empty">
-      <ion-icon name="film-outline"></ion-icon>
-      <p>Ingresa una búsqueda o selecciona una categoría para empezar.</p>
+    <div class="empty-state hidden" id="results-empty">
+      <i class="fas fa-film"></i>
+      <p>Enter a search or select a category to begin.</p>
     </div>
 
-    <!-- Results Grid -->
     <div class="catalog-grid" id="results-grid"></div>
 
-    <!-- Infinite Scroll Sentinel -->
     <div id="scroll-sentinel" class="scroll-sentinel hidden">
       <div class="spinner"></div>
-      <p>Cargando más contenidos...</p>
+      <p>Loading more content...</p>
     </div>
   </section>
 
-  <!-- --- IMMERSIVE OVERLAY DETAIL MODAL (#details-panel) --- -->
-  <div id="details-panel" class="hidden">
-    <!-- Click backdrop to close -->
-    <div class="modal-backdrop-close" id="modal-backdrop-close"></div>
-    
-    <!-- Close button -->
-    <button class="btn-close-modal" id="btn-close-modal" title="Cerrar detalles">
-      <ion-icon name="close-outline"></ion-icon>
+  <!-- DETAILS PANEL MODAL -->
+  <div id="details-panel" class="details-panel hidden">
+    <button class="btn-close-modal" id="btn-close-modal" title="Close details">
+      <i class="fas fa-times"></i>
     </button>
 
     <div class="details-content">
-      <!-- Video Player Container (Renders inside the modal) -->
-      <div class="video-player-container hidden" id="video-player-container">
-        <div class="player-header">
-          <span id="player-title">Reproduciendo...</span>
-          <button class="btn-close-player" id="close-player-btn" title="Cerrar reproductor">
-            <ion-icon name="close-outline"></ion-icon>
-          </button>
-        </div>
-        <div class="player-iframe-wrapper">
-          <iframe id="player-iframe" src="" allowfullscreen allow="autoplay; encrypted-media"></iframe>
-        </div>
-      </div>
-
       <div class="details-body">
-        <!-- Details Empty State -->
         <div class="details-empty" id="details-empty">
-          <ion-icon name="information-circle-outline"></ion-icon>
-          <h3>Detalles del Contenido</h3>
-          <p>Selecciona un elemento para ver su sinopsis, temporadas, servidores y opciones de descarga.</p>
+          <i class="fas fa-info-circle"></i>
+          <h3>Content Details</h3>
+          <p>Select an item to view its synopsis, seasons, servers and download options.</p>
         </div>
 
-        <!-- Details Content (Dynamic) -->
-        <div class="details-content-inner" id="details-content">
+        <div class="details-content-inner hidden" id="details-content">
           <div class="details-header-card">
             <img id="details-poster" src="" alt="Poster" class="details-poster">
             <div class="details-meta-info">
-              <span class="media-type-badge" id="details-type">PELICULA</span>
-              <h3 id="details-title">Título del Contenido</h3>
+              <span class="media-type-badge" id="details-type">MOVIE</span>
+              <h3 id="details-title">Content Title</h3>
               <p id="details-original-title" class="subtext">Original Title</p>
               
               <div class="meta-row">
                 <div class="meta-item year">
-                  <ion-icon name="calendar-outline"></ion-icon>
+                  <i class="fas fa-calendar"></i>
                   <span id="details-year">2024</span>
                 </div>
                 <div class="meta-item rating">
-                  <ion-icon name="star"></ion-icon>
+                  <i class="fas fa-star"></i>
                   <span id="details-rating">8.5</span>
                 </div>
               </div>
 
-              <div class="details-genres" id="details-genres">
-                <!-- Genres badges populated dynamically -->
-              </div>
+              <div class="details-genres" id="details-genres"></div>
             </div>
           </div>
 
-          <!-- Synopsis -->
           <div class="details-section">
-            <h4>Sinopsis</h4>
-            <p id="details-synopsis" class="synopsis-text">Sinopsis completa del contenido...</p>
+            <h4>Synopsis</h4>
+            <p id="details-synopsis" class="synopsis-text">Full content synopsis...</p>
           </div>
 
-          <!-- Cast & Crew -->
-          <div class="details-section meta-credits">
-            <p><strong>Director:</strong> <span id="details-director">Matt Reeves</span></p>
+          <div class="details-section">
+            <p><strong>Director:</strong> <span id="details-director">Unknown</span></p>
           </div>
 
-          <!-- Seasons & Episodes (Series only) -->
           <div class="details-section hidden" id="seasons-section">
-            <h4>Temporadas y Capítulos</h4>
-            <div class="seasons-tabs" id="seasons-tabs-container">
-              <!-- Season buttons populated dynamically -->
-            </div>
-            <div class="episodes-grid" id="episodes-container">
-              <!-- Episode buttons populated dynamically -->
-            </div>
+            <h4>Seasons & Episodes</h4>
+            <div class="seasons-tabs" id="seasons-tabs-container"></div>
+            <div class="episodes-grid" id="episodes-container"></div>
           </div>
 
-          <!-- Servers & Play Links -->
           <div class="details-section" id="servers-section">
-            <h4 id="servers-section-title">Servidores de Reproducción</h4>
+            <h4 id="servers-section-title">Playback Servers</h4>
             <div class="loading-state hidden" id="servers-loading">
               <div class="spinner"></div>
-              <p>Scrapeando servidores del capítulo...</p>
+              <p>Loading servers...</p>
             </div>
-            <div class="servers-list" id="servers-container">
-              <!-- Server list rows populated dynamically -->
-            </div>
+            <div class="servers-list" id="servers-container"></div>
           </div>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- --- SLIDING DOWNLOADS DRAWER (Panel deslizable) --- -->
+  <!-- DOWNLOADS PANEL -->
   <div class="downloads-panel" id="downloads-drawer">
     <div class="downloads-header">
-      <h2>Descargas Activas</h2>
-      <div class="downloads-header-actions">
-        <!-- Clear completed downloads button -->
-        <button class="btn-icon" id="clear-completed-downloads" title="Limpiar descargas completadas/fallidas">
-          <ion-icon name="trash-outline"></ion-icon>
-        </button>
-        <!-- Close Drawer Button -->
-        <button class="downloads-panel-close" id="downloads-panel-close" title="Cerrar gestor">
-          <ion-icon name="close-outline"></ion-icon>
-        </button>
-      </div>
+      <h2>Active Downloads</h2>
+      <button class="btn-icon" id="downloads-panel-close" title="Close manager">
+        <i class="fas fa-times"></i>
+      </button>
     </div>
     
     <div class="downloads-list" id="downloads-container">
-      <!-- No active downloads empty state -->
       <div class="downloads-empty" id="downloads-empty">
-        <ion-icon name="cloud-download-outline"></ion-icon>
-        <p>No tienes descargas activas en curso en este momento.</p>
+        <i class="fas fa-cloud-download-alt"></i>
+        <p>No active downloads right now.</p>
       </div>
     </div>
   </div>
