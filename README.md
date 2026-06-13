@@ -1,13 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8>
+  <meta charset="UTF-8">
 </head>
 <body>
 
-<h1 align="center">PeliApi & Downloader Engine</h1>
-
 <div align="center">
+  <h1>PeliApi & Downloader Engine</h1>
   <h3>Created and Maintained by <a href="https://github.com/FxxMorgan/">FxxMorgan</a></h3>
   <h4>Contributor: <a href="https://github.com/karashiga">karashiga</a></h4>
   <p>
@@ -25,7 +24,7 @@
   <img src="https://img.shields.io/github/license/FxxMorgan/peliapi" alt="License">
 </div>
 
-<hr>
+<br>
 
 <h2>CREDITS</h2>
 <p><strong>Original Creator:</strong> FxxMorgan - <a href="https://github.com/FxxMorgan/">https://github.com/FxxMorgan/</a></p>
@@ -33,16 +32,14 @@
 
 <hr>
 
-<p>
-  This tool was developed to facilitate querying and consuming automated content. It has been released freely to the community.
-</p>
-<p>
-  If you use this code in projects, websites, or applications, the <strong>Core Engine will automatically print credits to its original creator (FxxMorgan) and contributor (karashiga)</strong> in HTTP headers and console as part of the usage license.
-</p>
+<p>This tool was developed to facilitate querying and consuming automated content. It has been released freely to the community.</p>
+
+<p>If you use this code in projects, websites, or applications, the <strong>Core Engine will automatically print credits to its original creator (FxxMorgan) and contributor (karashiga)</strong> in HTTP headers and console as part of the usage license.</p>
 
 <hr>
 
 <h2>Supported Providers</h2>
+
 <table border="1" cellpadding="8" cellspacing="0">
   <thead>
     <tr><th>Provider</th><th>Search</th><th>Information</th><th>Episodes</th><th>Catalog</th><th>Status</th></tr>
@@ -55,8 +52,11 @@
 </table>
 
 <h3>Supported Video Servers and Modular Resolvers</h3>
+
 <table border="1" cellpadding="8" cellspacing="0">
-  <thead><tr><th>Server</th><th>Resolution</th><th>HLS</th><th>Notes</th></tr></thead>
+  <thead>
+    <tr><th>Server</th><th>Resolution</th><th>HLS</th><th>Notes</th></tr>
+  </thead>
   <tbody>
     <tr><td><strong>VOE</strong></td><td align="center">Modular</td><td align="center">No</td><td>Native decoding without virtual browser</td></tr>
     <tr><td><strong>Streamwish</strong></td><td align="center">Modular</td><td align="center">Yes</td><td>Automatic redirection and M3U8 unpacking</td></tr>
@@ -95,7 +95,9 @@
 <h3>2. Environment Variables</h3>
 <pre><code>cp .env.example .env</code></pre>
 <table border="1" cellpadding="8" cellspacing="0">
-  <thead><tr><th>Variable</th><th>Default</th><th>Description</th></tr></thead>
+  <thead>
+    <tr><th>Variable</th><th>Default</th><th>Description</th></tr>
+  </thead>
   <tbody>
     <tr><td><code>PORT</code></td><td><code>5555</code></td><td>Server listening port</td></tr>
     <tr><td><code>DOWNLOADS_DIR</code></td><td><code>downloads</code></td><td>Temporary download folder</td></tr>
