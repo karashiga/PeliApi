@@ -1,8 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>PeliApi & Downloader Engine</title>
+  <meta charset="UTF-8>
 </head>
 <body>
 
