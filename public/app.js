@@ -11,15 +11,15 @@ const state = {
   // Streaming Premium & Watch-First states
   filters: {
     type: 'all',       // 'all', 'movie', 'series', 'anime'
-    genre: '',         // slug del género
-    minRating: 0,      // rating mínimo
+    genre: '',         // genre slug
+    minRating: 0,      // minimum rating
     sortBy: 'default'  // 'default', 'rating-desc', 'rating-asc', 'title-asc', 'title-desc'
   },
-  genres: [],           // lista de géneros
-  currentPage: 1,       // página actual
-  hasNextPage: false,   // si hay página siguiente
-  isLoadingMore: false, // previene llamadas simultáneas
-  heroItems: [],        // películas en rotación del banner
+  genres: [],           // list of genres
+  currentPage: 1,       // current page
+  hasNextPage: false,   // whether there is a next page
+  isLoadingMore: false, // prevents simultaneous calls
+  heroItems: [],        // movies in banner rotation
   heroIndex: 0,
   heroInterval: null
 };
@@ -193,8 +193,8 @@ function setupEventListeners() {
       // Reset search field
       searchInput.value = "";
       
-      const label = type === "movie" ? "Películas" : type === "series" ? "Series" : "Anime";
-      showGridView(`Catálogo: ${label}`);
+      const label = type === "movie" ? "Movies" : type === "series" ? "TV Shows" : "Anime";
+      showGridView(`Catalog: ${label}`);
       loadFilteredCatalog(true);
     });
   });
@@ -385,7 +385,7 @@ async function loadGenres() {
 function populateGenreFilter(genres) {
   const select = document.getElementById("genre-filter");
   if (!select) return;
-  select.innerHTML = '<option value="">Todos los Géneros</option>';
+  select.innerHTML = '<option value="">All Genres</option>';
   genres.forEach(g => {
     const opt = document.createElement("option");
     opt.value = g.slug;
@@ -400,7 +400,7 @@ function createGenreCarouselRow(genre) {
   if (!container) return null;
   
   const row = createEl("div", ["carousel-row"]);
-  const title = createEl("h2", [], {}, `Películas de ${genre.name}`);
+  const title = createEl("h2", [], {}, `${genre.name} Movies`);
   const carouselContainer = createEl("div", ["carousel-container"], { id: `carousel-genre-${genre.slug}` });
   
   // Show skeletons initially
@@ -461,14 +461,14 @@ async function loadHomepage() {
           renderCarousel(carouselContainer, data.items || [], "movie");
         } catch (genreErr) {
           console.error(`Error loading genre carousel for ${genre.name}:`, genreErr.message);
-          carouselContainer.innerHTML = `<p style="padding: 20px; color: var(--text-muted);">No se pudieron cargar películas para este género.</p>`;
+          carouselContainer.innerHTML = `<p style="padding: 20px; color: var(--text-muted);">Could not load movies for this genre.</p>`;
         }
       }
     });
 
   } catch (err) {
     console.error("Error loading home page catalog data:", err.message);
-    showToast("Error al obtener catálogo de inicio", "error");
+    showToast("Error loading home catalog", "error");
   }
 }
 
@@ -487,7 +487,7 @@ function renderCarousel(container, items, type) {
     container.innerHTML = `
       <div class="downloads-empty" style="padding: 20px;">
         <ion-icon name="alert-circle-outline"></ion-icon>
-        <p>No hay contenidos disponibles en Cypher.</p>
+        <p>No content available on MOBIEE.</p>
       </div>
     `;
     return;
@@ -524,14 +524,14 @@ function renderCarousel(container, items, type) {
       posterWrapper.appendChild(rating);
     }
 
-    const typeBadge = createEl("span", ["type-badge"], {}, type);
+    const typeBadge = createEl("span", ["type-badge"], {}, type === "movie" ? "Movie" : type === "series" ? "Series" : "Anime");
     posterWrapper.appendChild(typeBadge);
 
     const info = createEl("div", ["media-info"]);
     const titleText = item.title.replace("VER ", "").replace(" Online Gratis HD", "");
     const title = createEl("h3", [], {}, titleText);
     
-    const typeLabel = type === "movie" ? "Película" : type === "series" ? "Serie" : "Anime";
+    const typeLabel = type === "movie" ? "Movie" : type === "series" ? "TV Show" : "Anime";
     const subtitle = createEl("p", [], {}, typeLabel);
 
     info.appendChild(title);
@@ -563,7 +563,7 @@ async function setupHeroBanner(item) {
   const cleanTitle = item.title.replace("VER ", "").replace(" Online Gratis HD", "");
   heroTitle.textContent = cleanTitle;
   heroRating.textContent = item.rating || "N/A";
-  heroType.textContent = item.type === "movie" ? "PELÍCULA RECOMENDADA" : item.type === "series" ? "SERIE RECOMENDADA" : "ANIME RECOMENDADO";
+  heroType.textContent = item.type === "movie" ? "RECOMMENDED MOVIE" : item.type === "series" ? "RECOMMENDED SHOW" : "RECOMMENDED ANIME";
   
   if (item.poster) {
     heroBanner.style.backgroundImage = `url('${item.poster}')`;
@@ -658,7 +658,7 @@ function transitionHero(item) {
 
 // Search Scraper Aggregator
 async function performSearch(query) {
-  showGridView(`Búsqueda: "${query}"`);
+  showGridView(`Search: "${query}"`);
   showResultsLoading(true);
   resultsEmpty.classList.add("hidden");
   resultsGrid.classList.add("hidden");
@@ -806,7 +806,7 @@ function showResultsLoading(show) {
 function showResultsError(message) {
   resultsGrid.classList.add("hidden");
   resultsEmpty.classList.remove("hidden");
-  resultsEmpty.querySelector("p").textContent = `Error: ${message}. Servidor no disponible.`;
+  resultsEmpty.querySelector("p").textContent = `Error: ${message}. Server unavailable.`;
   resultsEmpty.querySelector("ion-icon").name = "warning-outline";
   resultsCount.textContent = "0 items";
   document.getElementById("scroll-sentinel").classList.add("hidden");
@@ -822,7 +822,7 @@ function displayResults(items = null) {
   if (renderList.length === 0) {
     resultsGrid.classList.add("hidden");
     resultsEmpty.classList.remove("hidden");
-    resultsEmpty.querySelector("p").textContent = "No se encontraron resultados para los filtros seleccionados.";
+    resultsEmpty.querySelector("p").textContent = "No results found for the selected filters.";
     resultsEmpty.querySelector("ion-icon").name = "alert-circle-outline";
     return;
   }
@@ -861,14 +861,14 @@ function displayResults(items = null) {
       posterWrapper.appendChild(rating);
     }
 
-    const typeBadge = createEl("span", ["type-badge"], {}, item.type);
+    const typeBadge = createEl("span", ["type-badge"], {}, item.type === "movie" ? "Movie" : item.type === "series" ? "Series" : "Anime");
     posterWrapper.appendChild(typeBadge);
 
     const info = createEl("div", ["media-info"]);
     const titleText = item.title.replace("VER ", "").replace(" Online Gratis HD", "");
     const title = createEl("h3", [], {}, titleText);
     
-    const typeLabel = item.type === "movie" ? "Película" : item.type === "series" ? "Serie" : "Anime";
+    const typeLabel = item.type === "movie" ? "Movie" : item.type === "series" ? "TV Show" : "Anime";
     const subtitle = createEl("p", [], {}, typeLabel);
 
     info.appendChild(title);
@@ -900,8 +900,8 @@ async function loadMediaDetails(item) {
     detailsPoster.src = item.poster || "https://www.pelisplushd.la/static/img/favicon.png";
     detailsTitle.textContent = item.title.replace("VER ", "").replace(" Online Gratis HD", "");
     detailsOriginalTitle.textContent = item.slug;
-    detailsType.textContent = item.type === "movie" ? "PELICULA" : "SERIE";
-    detailsYear.textContent = "Cargando...";
+    detailsType.textContent = item.type === "movie" ? "MOVIE" : "TV SHOW";
+    detailsYear.textContent = "Loading...";
     detailsRating.textContent = item.rating || "N/A";
     
     detailsContent.classList.remove("hidden");
@@ -916,11 +916,11 @@ async function loadMediaDetails(item) {
     detailsOriginalTitle.textContent = fullInfo.originalTitle || fullInfo.slug;
     detailsYear.textContent = fullInfo.year || "N/A";
     detailsRating.textContent = fullInfo.rating || "N/A";
-    detailsSynopsis.textContent = fullInfo.synopsis || "Sin sinopsis disponible.";
+    detailsSynopsis.textContent = fullInfo.synopsis || "No synopsis available.";
     
     detailsDirector.textContent = "";
     const strong = createEl("strong", [], {}, "Director: ");
-    detailsDirector.append(strong, document.createTextNode(fullInfo.directors.join(", ") || "Desconocido"));
+    detailsDirector.append(strong, document.createTextNode(fullInfo.directors.join(", ") || "Unknown"));
 
     // Genres Tags
     detailsGenres.innerHTML = "";
@@ -933,16 +933,16 @@ async function loadMediaDetails(item) {
 
     if (fullInfo.type === "movie") {
       seasonsSection.classList.add("hidden");
-      serversSectionTitle.textContent = "Servidores de Reproducción (Película)";
+      serversSectionTitle.textContent = "Playback Servers (Movie)";
       renderServers(fullInfo.servers || []);
     } else {
       // It's a Series / Anime
       seasonsSection.classList.remove("hidden");
-      serversSectionTitle.textContent = "Servidores del Capítulo";
+      serversSectionTitle.textContent = "Episode Servers";
       renderSeasonsTabs(fullInfo.seasons || []);
     }
   } catch (err) {
-    showToast(`Error al obtener detalles: ${err.message}`, 'error');
+    showToast(`Error loading details: ${err.message}`, 'error');
   }
 }
 
@@ -959,7 +959,7 @@ function renderSeasonsTabs(seasons = []) {
   seasons.forEach((season, index) => {
     const tab = document.createElement("button");
     tab.className = `season-tab ${index === 0 ? "active" : ""}`;
-    tab.textContent = season.name || `Temp ${season.number}`;
+    tab.textContent = season.name || `Season ${season.number}`;
     
     tab.addEventListener("click", () => {
       seasonsTabsContainer.querySelectorAll(".season-tab").forEach((t) => t.classList.remove("active"));
@@ -1012,7 +1012,7 @@ async function fetchEpisodeServers(episode) {
     renderServers(data.servers || [], episode.url);
   } catch (err) {
     const errorDiv = createEl("div", ["downloads-empty"]);
-    const errorText = createEl("p", [], {}, `Error al obtener servidores: ${err.message}`);
+    const errorText = createEl("p", [], {}, `Error loading servers: ${err.message}`);
     errorDiv.appendChild(errorText);
     serversContainer.appendChild(errorDiv);
   } finally {
@@ -1028,7 +1028,7 @@ function renderServers(servers = [], contentUrl = null) {
     serversContainer.innerHTML = `
       <div class="downloads-empty">
         <ion-icon name="alert-circle-outline"></ion-icon>
-        <p>No hay servidores disponibles en Cypher.</p>
+        <p>No servers available on MOBIEE.</p>
       </div>
     `;
     return;
@@ -1038,7 +1038,7 @@ function renderServers(servers = [], contentUrl = null) {
   // Standard Watch-Only if provider is Cuevana3 (doesn't support direct download API)
   const isWatchOnly = state.selectedMedia.provider === "cuevana3";
 
-  // Prioritize "Latino" / "Español Latino" servers
+  // Prioritize "Latino" / "Spanish Latino" servers
   const sortedServers = [...servers].sort((a, b) => {
     const aLat = (a.language || "").toLowerCase().includes("latino");
     const bLat = (b.language || "").toLowerCase().includes("latino");
@@ -1067,14 +1067,14 @@ function renderServers(servers = [], contentUrl = null) {
     nameGroup.append(logo, info);
 
     const actions = createEl("div", ["server-actions"]);
-    const playBtn = createEl("button", ["btn-action", "play"], { title: "Ver ahora en el reproductor integrado" });
+    const playBtn = createEl("button", ["btn-action", "play"], { title: "Watch now in the built-in player" });
     const playIcon = createEl("ion-icon", [], { name: "play-outline" });
-    playBtn.append(playIcon, document.createTextNode(" Ver"));
+    playBtn.append(playIcon, document.createTextNode(" Watch"));
     actions.appendChild(playBtn);
 
     // Only render download action if not Cuevana3 (watch only)
     if (!isWatchOnly) {
-      const downloadBtn = createEl("button", ["btn-action", "download"], { title: "Descargar video en segundo plano" });
+      const downloadBtn = createEl("button", ["btn-action", "download"], { title: "Download video in the background" });
       const downloadIcon = createEl("ion-icon", [], { name: "cloud-download-outline" });
       downloadBtn.appendChild(downloadIcon);
       actions.appendChild(downloadBtn);
@@ -1098,9 +1098,9 @@ function renderServers(servers = [], contentUrl = null) {
 function playEmbedVideo(embedUrl, serverName, language) {
   const title = state.selectedMedia.title;
   const episodeLabel = state.selectedMedia.type === "series" || state.selectedMedia.type === "anime"
-    ? ` — Temp ${state.activeSeason} Cap ${state.activeEpisode}`
+    ? ` — Season ${state.activeSeason} Episode ${state.activeEpisode}`
     : "";
-  playerTitle.textContent = `Reproduciendo: ${title}${episodeLabel} — ${serverName.toUpperCase()} (${language})`;
+  playerTitle.textContent = `Playing: ${title}${episodeLabel} — ${serverName.toUpperCase()} (${language})`;
   playerIframe.src = embedUrl;
   videoPlayerContainer.classList.remove("hidden");
   
@@ -1127,9 +1127,9 @@ async function startDownloadJob(mediaUrl, language, serverToken) {
     downloadsDrawer.classList.add("open");
     drawerBackdrop.classList.add("open");
     
-    showToast("¡Descarga iniciada con éxito!", "success");
+    showToast("Download started successfully!", "success");
   } catch (err) {
-    showToast(`Error al iniciar descarga: ${err.message}`, "error");
+    showToast(`Error starting download: ${err.message}`, "error");
   }
 }
 
@@ -1160,7 +1160,7 @@ function registerDownloadProgressCard(id, url, server) {
   progressContainer.append(progressWrapper, progressPct);
 
   const footer = createEl("div", ["download-card-footer"]);
-  const footerText = createEl("span", [], { id: `dl-speed-${id}` }, "Preparando...");
+  const footerText = createEl("span", [], { id: `dl-speed-${id}` }, "Preparing...");
   const actionContainer = createEl("div", [], { id: `dl-action-container-${id}` });
   footer.append(footerText, actionContainer);
 
@@ -1181,7 +1181,7 @@ function registerDownloadProgressCard(id, url, server) {
 
   function scheduleNextPoll() {
     if (attempts >= maxAttempts) {
-      updateDownloadUI(id, { status: "failed", error: "Timeout: Tiempo de sondeo excedido" });
+      updateDownloadUI(id, { status: "failed", error: "Timeout: Polling time exceeded" });
       return;
     }
 
@@ -1242,11 +1242,11 @@ function updateDownloadUI(id, data) {
   pctText.textContent = `${data.progress}%`;
 
   if (data.status === "downloading") {
-    footerText.textContent = `Descargando desde: ${data.currentServer ? data.currentServer.toUpperCase() : "..."}`;
+    footerText.textContent = `Downloading from: ${data.currentServer ? data.currentServer.toUpperCase() : "..."}`;
   } else if (data.status === "preparing") {
-    footerText.textContent = `Resolviendo: ${data.currentServer ? data.currentServer.toUpperCase() : "..."}`;
+    footerText.textContent = `Resolving: ${data.currentServer ? data.currentServer.toUpperCase() : "..."}`;
   } else if (data.status === "completed") {
-    footerText.textContent = `¡Completado! ${(Number(data.fileSize || 0) / (1024 * 1024)).toFixed(1)} MB`;
+    footerText.textContent = `Completed! ${(Number(data.fileSize || 0) / (1024 * 1024)).toFixed(1)} MB`;
     
     const timeoutId = state.pollingIntervals.get(id);
     if (timeoutId) clearTimeout(timeoutId);
@@ -1258,13 +1258,13 @@ function updateDownloadUI(id, data) {
       download: "" 
     });
     const saveIcon = createEl("ion-icon", [], { name: "download-outline" });
-    saveBtn.append(saveIcon, document.createTextNode(" Guardar"));
+    saveBtn.append(saveIcon, document.createTextNode(" Save"));
     actionContainer.appendChild(saveBtn);
     
     // Play complete toast
-    showToast("¡Descarga de archivo finalizada!", "success");
+    showToast("File download completed!", "success");
   } else if (data.status === "failed") {
-    footerText.textContent = `Error: ${data.error || "Desconocido"}`;
+    footerText.textContent = `Error: ${data.error || "Unknown"}`;
     footerText.style.color = "var(--danger-color)";
     
     const timeoutId = state.pollingIntervals.get(id);
