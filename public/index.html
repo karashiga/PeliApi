@@ -6,781 +6,25 @@
   <title>MOBIEE — Premium Streaming</title>
   <link rel="icon" type="image/png" href="https://www.pelisplushd.la/static/img/favicon.png">
   
-  <!-- Font Awesome Icons (Netflix style) -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Ionicons -->
+  <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+  <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
   
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
-    :root {
-      --primary-color: #e50914;
-      --secondary-color: #564d4d;
-      --dark-bg: #141414;
-      --card-bg: #2f2f2f;
-      --text-primary: #ffffff;
-      --text-secondary: #808080;
-      --accent-hover: #f5b800;
-      --transition: all 0.3s ease;
-    }
-
-    html {
-      scroll-behavior: smooth;
-    }
-
-    body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background-color: var(--dark-bg);
-      color: var(--text-primary);
-      line-height: 1.6;
-      overflow-x: hidden;
-    }
-
-    /* ===== NAVBAR (Netflix Style) ===== */
-    .netflix-navbar {
-      position: sticky;
-      top: 0;
-      z-index: 100;
-      background: linear-gradient(180deg, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0) 100%);
-      backdrop-filter: blur(8px);
-      padding: 1rem 2rem;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      border-bottom: 1px solid rgba(255,255,255,0.1);
-      transition: background 0.3s ease;
-    }
-
-    .netflix-navbar.scrolled {
-      background: rgba(20, 20, 20, 0.95);
-      border-bottom: 1px solid rgba(255,255,255,0.05);
-    }
-
-    .nav-left {
-      display: flex;
-      align-items: center;
-      gap: 3rem;
-    }
-
-    .brand {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      cursor: pointer;
-      transition: transform 0.3s ease;
-    }
-
-    .brand:hover {
-      transform: scale(1.05);
-    }
-
-    .brand h1 {
-      font-size: 1.8rem;
-      font-weight: 800;
-      letter-spacing: -0.5px;
-    }
-
-    .brand span {
-      color: var(--primary-color);
-    }
-
-    .brand-icon {
-      font-size: 1.8rem;
-      color: var(--primary-color);
-    }
-
-    .nav-links {
-      display: flex;
-      list-style: none;
-      gap: 2rem;
-    }
-
-    .nav-links li {
-      position: relative;
-    }
-
-    .nav-links a {
-      color: var(--text-primary);
-      text-decoration: none;
-      font-weight: 500;
-      font-size: 0.95rem;
-      cursor: pointer;
-      transition: color 0.3s ease;
-    }
-
-    .nav-links a:hover,
-    .nav-links li.active a {
-      color: var(--primary-color);
-    }
-
-    .nav-right {
-      display: flex;
-      align-items: center;
-      gap: 1.5rem;
-    }
-
-    .search-container {
-      position: relative;
-    }
-
-    .search-form {
-      display: flex;
-      align-items: center;
-    }
-
-    .search-box-wrapper {
-      position: relative;
-      display: flex;
-      align-items: center;
-      background: rgba(255,255,255,0.1);
-      border-radius: 4px;
-      padding: 0.5rem 1rem;
-      border: 1px solid rgba(255,255,255,0.2);
-      transition: all 0.3s ease;
-    }
-
-    .search-box-wrapper:focus-within {
-      background: rgba(255,255,255,0.15);
-      border-color: var(--primary-color);
-      box-shadow: 0 0 10px rgba(229,9,20,0.3);
-    }
-
-    .search-icon {
-      margin-right: 0.5rem;
-      color: var(--text-secondary);
-      font-size: 0.95rem;
-    }
-
-    #search-input {
-      background: transparent;
-      border: none;
-      color: var(--text-primary);
-      outline: none;
-      width: 200px;
-      font-size: 0.9rem;
-    }
-
-    #search-input::placeholder {
-      color: var(--text-secondary);
-    }
-
-    .api-status-badge {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      padding: 0.4rem 0.8rem;
-      background: rgba(34, 177, 76, 0.2);
-      border: 1px solid rgba(34, 177, 76, 0.5);
-      border-radius: 4px;
-      font-size: 0.8rem;
-      font-weight: 500;
-    }
-
-    .status-dot {
-      width: 6px;
-      height: 6px;
-      border-radius: 50%;
-      background: #22b14c;
-      animation: pulse 2s infinite;
-    }
-
-    @keyframes pulse {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0.5; }
-    }
-
-    .btn-icon, .btn-downloads-toggle {
-      background: transparent;
-      border: none;
-      color: var(--text-primary);
-      cursor: pointer;
-      font-size: 1.2rem;
-      transition: color 0.3s ease;
-      padding: 0.5rem;
-    }
-
-    .btn-icon:hover, .btn-downloads-toggle:hover {
-      color: var(--primary-color);
-    }
-
-    .downloads-badge {
-      position: absolute;
-      top: -5px;
-      right: -5px;
-      background: var(--primary-color);
-      color: white;
-      border-radius: 50%;
-      font-size: 0.7rem;
-      padding: 0.1rem 0.4rem;
-      min-width: 18px;
-      text-align: center;
-    }
-
-    /* ===== HERO BANNER ===== */
-    .hero-banner {
-      height: 600px;
-      background-size: cover;
-      background-position: center;
-      position: relative;
-      display: flex;
-      align-items: flex-end;
-      overflow: hidden;
-    }
-
-    .hero-banner::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: linear-gradient(
-        to right,
-        rgba(0,0,0,0.8) 0%,
-        rgba(0,0,0,0.4) 50%,
-        rgba(0,0,0,0) 100%
-      );
-    }
-
-    .hero-content {
-      position: relative;
-      z-index: 2;
-      padding: 3rem;
-      max-width: 500px;
-    }
-
-    .hero-type-badge {
-      display: inline-block;
-      background: var(--primary-color);
-      padding: 0.5rem 1rem;
-      border-radius: 4px;
-      font-size: 0.75rem;
-      font-weight: 700;
-      letter-spacing: 1px;
-      margin-bottom: 1rem;
-    }
-
-    .hero-title {
-      font-size: 3.5rem;
-      font-weight: 900;
-      margin-bottom: 1.5rem;
-      line-height: 1.2;
-      letter-spacing: -1px;
-    }
-
-    .hero-meta-row {
-      display: flex;
-      gap: 2rem;
-      margin-bottom: 1.5rem;
-      align-items: center;
-    }
-
-    .hero-meta-item {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      font-size: 1rem;
-      color: var(--text-secondary);
-    }
-
-    .hero-meta-item i {
-      color: var(--primary-color);
-      font-size: 1.2rem;
-    }
-
-    .hero-synopsis {
-      font-size: 1rem;
-      line-height: 1.6;
-      margin-bottom: 2rem;
-      color: #ccc;
-    }
-
-    .hero-actions {
-      display: flex;
-      gap: 1rem;
-    }
-
-    .btn-hero {
-      padding: 0.8rem 2rem;
-      border: none;
-      border-radius: 4px;
-      font-size: 1rem;
-      font-weight: 600;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      gap: 0.75rem;
-      transition: all 0.3s ease;
-      letter-spacing: 0.5px;
-    }
-
-    .btn-hero.play {
-      background: var(--primary-color);
-      color: white;
-    }
-
-    .btn-hero.play:hover {
-      background: #c40812;
-      transform: scale(1.05);
-      box-shadow: 0 8px 24px rgba(229,9,20,0.4);
-    }
-
-    .btn-hero.info {
-      background: rgba(255,255,255,0.25);
-      color: white;
-    }
-
-    .btn-hero.info:hover {
-      background: rgba(255,255,255,0.4);
-      transform: scale(1.05);
-    }
-
-    .hero-dots {
-      position: absolute;
-      bottom: 20px;
-      left: 0;
-      right: 0;
-      display: flex;
-      justify-content: center;
-      gap: 10px;
-      z-index: 3;
-    }
-
-    /* ===== CAROUSEL SECTIONS ===== */
-    .carousel-section {
-      padding: 2rem 0;
-    }
-
-    .carousel-row {
-      margin-bottom: 3rem;
-      padding: 0 2rem;
-    }
-
-    .carousel-row h2 {
-      font-size: 1.5rem;
-      margin-bottom: 1.5rem;
-      font-weight: 700;
-      letter-spacing: -0.5px;
-    }
-
-    .carousel-container {
-      display: flex;
-      gap: 1rem;
-      overflow-x: auto;
-      scroll-behavior: smooth;
-      padding-bottom: 1rem;
-    }
-
-    .carousel-container::-webkit-scrollbar {
-      height: 8px;
-    }
-
-    .carousel-container::-webkit-scrollbar-track {
-      background: rgba(255,255,255,0.1);
-      border-radius: 4px;
-    }
-
-    .carousel-container::-webkit-scrollbar-thumb {
-      background: var(--primary-color);
-      border-radius: 4px;
-    }
-
-    /* ===== CARDS ===== */
-    .card {
-      min-width: 180px;
-      height: 270px;
-      background: var(--card-bg);
-      border-radius: 4px;
-      overflow: hidden;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      position: relative;
-      flex-shrink: 0;
-    }
-
-    .card:hover {
-      transform: scale(1.08);
-      box-shadow: 0 8px 24px rgba(229,9,20,0.4);
-      z-index: 10;
-    }
-
-    .card img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-
-    .card-overlay {
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: rgba(0,0,0,0.6);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      opacity: 0;
-      transition: opacity 0.3s ease;
-    }
-
-    .card:hover .card-overlay {
-      opacity: 1;
-    }
-
-    .card-overlay-content {
-      text-align: center;
-      color: white;
-    }
-
-    .card-overlay-content i {
-      font-size: 2.5rem;
-      margin-bottom: 0.5rem;
-      color: var(--primary-color);
-    }
-
-    /* ===== SKELETON LOADING ===== */
-    .skeleton-row {
-      display: flex;
-      gap: 1rem;
-    }
-
-    .skeleton-card {
-      min-width: 180px;
-      height: 270px;
-      background: linear-gradient(
-        90deg,
-        var(--card-bg) 25%,
-        rgba(255,255,255,0.1) 50%,
-        var(--card-bg) 75%
-      );
-      background-size: 200% 100%;
-      border-radius: 4px;
-      animation: skeleton-load 1.5s infinite;
-    }
-
-    @keyframes skeleton-load {
-      0% { background-position: 200% 0; }
-      100% { background-position: -200% 0; }
-    }
-
-    /* ===== GRID VIEW ===== */
-    .grid-section {
-      padding: 2rem;
-      min-height: 100vh;
-    }
-
-    .view-container {
-      width: 100%;
-    }
-
-    .filter-toolbar {
-      background: rgba(255,255,255,0.05);
-      border: 1px solid rgba(255,255,255,0.1);
-      border-radius: 4px;
-      padding: 1.5rem;
-      margin-bottom: 2rem;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 1.5rem;
-      align-items: center;
-    }
-
-    .filter-group {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      flex-wrap: wrap;
-    }
-
-    .filter-chip {
-      padding: 0.6rem 1.2rem;
-      background: transparent;
-      border: 1px solid rgba(255,255,255,0.3);
-      color: var(--text-primary);
-      border-radius: 20px;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      font-weight: 500;
-      font-size: 0.9rem;
-    }
-
-    .filter-chip:hover,
-    .filter-chip.active {
-      background: var(--primary-color);
-      border-color: var(--primary-color);
-    }
-
-    .filter-select {
-      padding: 0.6rem 1rem;
-      background: var(--card-bg);
-      border: 1px solid rgba(255,255,255,0.2);
-      color: var(--text-primary);
-      border-radius: 4px;
-      cursor: pointer;
-      font-size: 0.9rem;
-    }
-
-    .catalog-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-      gap: 1.5rem;
-      margin-bottom: 2rem;
-    }
-
-    .grid-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 2rem;
-    }
-
-    .results-count {
-      color: var(--text-secondary);
-      font-size: 0.9rem;
-    }
-
-    /* ===== DETAILS MODAL ===== */
-    .details-panel {
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: rgba(0,0,0,0.8);
-      backdrop-filter: blur(8px);
-      z-index: 200;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 2rem;
-    }
-    .details-panel.hidden { display: none; }
-
-    .details-content {
-      background: var(--dark-bg);
-      border-radius: 8px;
-      width: 100%;
-      max-width: 800px;
-      max-height: 85vh;
-      overflow-y: auto;
-      position: relative;
-    }
-
-    .btn-close-modal {
-      position: absolute;
-      top: 1rem;
-      right: 1rem;
-      background: rgba(0,0,0,0.7);
-      border: none;
-      color: white;
-      font-size: 1.5rem;
-      cursor: pointer;
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      z-index: 210;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .btn-close-modal:hover {
-      background: var(--primary-color);
-    }
-
-    .details-header-card {
-      display: flex;
-      gap: 2rem;
-      padding: 2rem;
-    }
-
-    .details-poster {
-      width: 150px;
-      height: 225px;
-      object-fit: cover;
-      border-radius: 4px;
-    }
-
-    .media-type-badge {
-      background: var(--primary-color);
-      padding: 0.3rem 0.8rem;
-      border-radius: 4px;
-      font-size: 0.75rem;
-      font-weight: bold;
-      display: inline-block;
-      margin-bottom: 0.5rem;
-    }
-
-    .details-meta-info {
-      flex: 1;
-    }
-
-    .meta-row {
-      display: flex;
-      gap: 1rem;
-      margin: 0.5rem 0;
-    }
-
-    .meta-item {
-      display: flex;
-      align-items: center;
-      gap: 0.3rem;
-    }
-
-    .details-genres {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.5rem;
-      margin-top: 0.5rem;
-    }
-
-    .details-section {
-      padding: 1rem 2rem;
-      border-top: 1px solid rgba(255,255,255,0.1);
-    }
-
-    .servers-list {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.8rem;
-    }
-
-    .server-btn {
-      background: rgba(255,255,255,0.1);
-      border: 1px solid rgba(255,255,255,0.2);
-      padding: 0.5rem 1rem;
-      border-radius: 4px;
-      color: white;
-      cursor: pointer;
-      transition: all 0.2s;
-    }
-    .server-btn:hover {
-      background: var(--primary-color);
-      border-color: var(--primary-color);
-    }
-
-    .seasons-tabs {
-      display: flex;
-      gap: 0.5rem;
-      flex-wrap: wrap;
-      margin-bottom: 1rem;
-    }
-
-    .season-btn {
-      background: rgba(255,255,255,0.1);
-      border: none;
-      padding: 0.5rem 1rem;
-      color: white;
-      cursor: pointer;
-      border-radius: 4px;
-    }
-
-    .season-btn.active {
-      background: var(--primary-color);
-    }
-
-    .episodes-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-      gap: 0.8rem;
-    }
-
-    .episode-btn {
-      background: rgba(255,255,255,0.05);
-      border: 1px solid rgba(255,255,255,0.1);
-      padding: 0.5rem;
-      color: white;
-      cursor: pointer;
-      border-radius: 4px;
-      font-size: 0.8rem;
-    }
-
-    /* Downloads Panel */
-    .downloads-panel {
-      position: fixed;
-      right: 0;
-      top: 0;
-      bottom: 0;
-      width: 350px;
-      background: var(--dark-bg);
-      border-left: 1px solid rgba(255,255,255,0.1);
-      z-index: 150;
-      transform: translateX(100%);
-      transition: transform 0.3s ease;
-    }
-    .downloads-panel.open {
-      transform: translateX(0);
-    }
-    .downloads-header {
-      padding: 1rem;
-      border-bottom: 1px solid rgba(255,255,255,0.1);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-    .downloads-list {
-      padding: 1rem;
-      overflow-y: auto;
-      height: calc(100% - 70px);
-    }
-    .downloads-empty {
-      text-align: center;
-      color: var(--text-secondary);
-      padding: 2rem;
-    }
-
-    .loading-state {
-      text-align: center;
-      padding: 2rem;
-    }
-
-    .spinner {
-      width: 40px;
-      height: 40px;
-      border: 3px solid rgba(255,255,255,0.1);
-      border-top: 3px solid var(--primary-color);
-      border-radius: 50%;
-      animation: spin 0.8s linear infinite;
-      margin: 0 auto 1rem;
-    }
-
-    @keyframes spin {
-      to { transform: rotate(360deg); }
-    }
-
-    .hidden {
-      display: none !important;
-    }
-
-    @media (max-width: 768px) {
-      .hero-title { font-size: 2rem; }
-      .card { min-width: 140px; height: 210px; }
-      .catalog-grid { grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); }
-      .nav-links { gap: 1rem; }
-      .hero-content { padding: 2rem; }
-      .hero-actions { flex-direction: column; }
-      .btn-hero { width: 100%; justify-content: center; }
-      .filter-toolbar { flex-direction: column; align-items: stretch; }
-      .details-header-card { flex-direction: column; align-items: center; text-align: center; }
-    }
-  </style>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
+  <!-- Glassmorphic Background Shapes -->
+  <div class="bg-shape shape-1"></div>
+  <div class="bg-shape shape-2"></div>
 
-  <!-- Background shapes (preserved for compatibility) -->
-  <div class="bg-shape shape-1" style="display: none;"></div>
-  <div class="bg-shape shape-2" style="display: none;"></div>
-  <div class="drawer-backdrop" id="drawer-backdrop" style="display: none;"></div>
+  <!-- Drawer Backdrop Blur -->
+  <div class="drawer-backdrop" id="drawer-backdrop"></div>
 
-  <!-- NAVBAR (MOBIEE Netflix Style) -->
+  <!-- --- Netflix Sticky Navigation Bar --- -->
   <nav class="netflix-navbar" id="netflix-navbar">
     <div class="nav-left">
       <div class="brand" id="brand-logo">
-        <i class="fas fa-play-circle brand-icon"></i>
+        <ion-icon name="videocam" class="brand-icon"></ion-icon>
         <h1>MOB<span>IEE</span></h1>
       </div>
       <ul class="nav-links">
@@ -790,49 +34,78 @@
         <li id="nav-item-anime"><a class="filter-tab" data-type="anime">Anime</a></li>
       </ul>
     </div>
+    
     <div class="nav-right">
+      <!-- Expanded Search Box -->
       <div class="search-container">
         <form id="search-form" class="search-form">
           <div class="search-box-wrapper">
-            <i class="fas fa-search search-icon"></i>
+            <ion-icon name="search-outline" class="search-icon"></ion-icon>
             <input type="text" id="search-input" placeholder="Search movies, shows..." required>
+            <button type="submit" class="btn-search-submit"></button>
           </div>
         </form>
       </div>
+
+      <!-- API Status -->
       <div class="api-status-badge online" id="status-badge">
         <span class="status-dot"></span>
         <span class="status-text">Online</span>
       </div>
-      <button class="btn-downloads-toggle" id="btn-downloads-toggle" title="Download Manager" style="position: relative;">
-        <i class="fas fa-cloud-download-alt"></i>
+
+      <!-- Downloads Toggle Button -->
+      <button class="btn-downloads-toggle mini" id="btn-downloads-toggle" title="Download Manager">
+        <ion-icon name="cloud-download-outline"></ion-icon>
         <span class="downloads-badge" id="downloads-badge" style="display: none;">0</span>
       </button>
     </div>
   </nav>
 
-  <!-- HOME VIEW -->
+  <!-- --- HOME VIEW (Hero Banner + Horizontal Rows) --- -->
   <main id="home-view" class="animate-fade-in">
+    <!-- Featured Hero Section -->
     <section class="hero-banner" id="hero-banner" style="background-image: url('https://images.unsplash.com/photo-1536440136628-849c177e76a1?q=80&w=1600');">
       <div class="hero-content">
         <span class="hero-type-badge" id="hero-type">RECOMMENDED MOVIE</span>
         <h2 class="hero-title" id="hero-title">The Dark Knight</h2>
+        
         <div class="hero-meta-row">
-          <div class="hero-meta-item rating"><i class="fas fa-star"></i><span id="hero-rating">9.0</span></div>
-          <div class="hero-meta-item"><i class="fas fa-calendar-alt"></i><span id="hero-year">2008</span></div>
+          <div class="hero-meta-item rating">
+            <ion-icon name="star"></ion-icon>
+            <span id="hero-rating">9.0</span>
+          </div>
+          <div class="hero-meta-item">
+            <ion-icon name="calendar-outline"></ion-icon>
+            <span id="hero-year">2008</span>
+          </div>
         </div>
-        <p class="hero-synopsis" id="hero-synopsis">Batman faces off against the Joker, a criminal mastermind who plunges Gotham City into chaos. The Dark Knight must accept one of the greatest psychological and physical tests in his battle against injustice.</p>
+
+        <p class="hero-synopsis" id="hero-synopsis">
+          Batman faces off against the Joker, a twisted criminal mastermind who unleashes chaos on Gotham City. The Dark Knight must endure one of the greatest psychological and physical tests in his fight against injustice.
+        </p>
+
         <div class="hero-actions">
-          <button class="btn-hero play" id="hero-play-btn"><i class="fas fa-play"></i><span>Watch Now</span></button>
-          <button class="btn-hero info" id="hero-info-btn"><i class="fas fa-info-circle"></i><span>More Info</span></button>
+          <button class="btn-hero play" id="hero-play-btn">
+            <ion-icon name="play-sharp"></ion-icon>
+            <span>Watch Now</span>
+          </button>
+          <button class="btn-hero info" id="hero-info-btn">
+            <ion-icon name="information-circle-outline"></ion-icon>
+            <span>More Info</span>
+          </button>
         </div>
       </div>
+      <!-- Hero Carousel Indicators -->
       <div class="hero-dots" id="hero-dots"></div>
     </section>
 
+    <!-- Content Carousels Container -->
     <section class="view-container carousel-section" id="carousel-section-container">
+      <!-- Carousel Row 1: Movies -->
       <div class="carousel-row">
-        <h2>Trending Movies</h2>
+        <h2>Featured Movies</h2>
         <div class="carousel-container" id="carousel-movies">
+          <!-- Skeleton Loading state -->
           <div class="skeleton-row">
             <div class="skeleton-card"></div>
             <div class="skeleton-card"></div>
@@ -843,8 +116,10 @@
           </div>
         </div>
       </div>
+
+      <!-- Carousel Row 2: Series -->
       <div class="carousel-row">
-        <h2>Popular Shows</h2>
+        <h2>Trending Now</h2>
         <div class="carousel-container" id="carousel-series">
           <div class="skeleton-row">
             <div class="skeleton-card"></div>
@@ -856,8 +131,10 @@
           </div>
         </div>
       </div>
+
+      <!-- Carousel Row 3: Anime -->
       <div class="carousel-row">
-        <h2>Top Anime</h2>
+        <h2>Recommended Anime</h2>
         <div class="carousel-container" id="carousel-anime">
           <div class="skeleton-row">
             <div class="skeleton-card"></div>
@@ -872,20 +149,27 @@
     </section>
   </main>
 
-  <!-- GRID VIEW -->
+  <!-- --- GRID VIEW (Search / Full Categories / Filtering) --- -->
   <section class="view-container grid-section hidden" id="grid-view">
+    <!-- Filter Toolbar - Sticky below navbar -->
     <div class="filter-toolbar" id="filter-toolbar">
+      <!-- Type Chips -->
       <div class="filter-group">
         <button class="filter-chip active" data-type="all">All</button>
         <button class="filter-chip" data-type="movie">🎬 Movies</button>
-        <button class="filter-chip" data-type="series">📺 Shows</button>
+        <button class="filter-chip" data-type="series">📺 TV Shows</button>
         <button class="filter-chip" data-type="anime">⛩️ Anime</button>
       </div>
+      
+      <!-- Genre Selector -->
       <div class="filter-group">
         <select id="genre-filter" class="filter-select">
           <option value="">All Genres</option>
+          <!-- Populated dynamically -->
         </select>
       </div>
+      
+      <!-- Rating Selector -->
       <div class="filter-group">
         <select id="rating-filter" class="filter-select">
           <option value="">Any Rating</option>
@@ -896,115 +180,167 @@
           <option value="5">⭐ 5.0+</option>
         </select>
       </div>
+
+      <!-- Sort Filter -->
       <div class="filter-group">
         <select id="sort-filter" class="filter-select">
           <option value="default">Sort by: Default</option>
           <option value="rating-desc">⭐ Highest Rating</option>
-          <option value="rating-asc">⭐ Lowest Rating</option>
+          <option value="rating-asc">Rating Low → High</option>
           <option value="title-asc">A → Z</option>
           <option value="title-desc">Z → A</option>
         </select>
       </div>
     </div>
+
     <div class="grid-header">
       <h2 id="results-title">Search Results</h2>
       <span class="results-count" id="results-count">0 items</span>
     </div>
+    
+    <!-- Loading State -->
     <div class="loading-state hidden" id="results-loading">
       <div class="spinner"></div>
       <p>Scraping content servers...</p>
     </div>
+
+    <!-- Empty / Error State -->
     <div class="downloads-empty hidden" id="results-empty">
-      <i class="fas fa-film"></i>
-      <p>Enter a search or select a category to begin.</p>
+      <ion-icon name="film-outline"></ion-icon>
+      <p>Enter a search or select a category to get started.</p>
     </div>
+
+    <!-- Results Grid -->
     <div class="catalog-grid" id="results-grid"></div>
+
+    <!-- Infinite Scroll Sentinel -->
     <div id="scroll-sentinel" class="scroll-sentinel hidden">
       <div class="spinner"></div>
       <p>Loading more content...</p>
     </div>
   </section>
 
-  <!-- DETAILS MODAL -->
-  <div id="details-panel" class="details-panel hidden">
-    <button class="btn-close-modal" id="btn-close-modal"><i class="fas fa-times"></i></button>
+  <!-- --- IMMERSIVE OVERLAY DETAIL MODAL (#details-panel) --- -->
+  <div id="details-panel" class="hidden">
+    <!-- Click backdrop to close -->
+    <div class="modal-backdrop-close" id="modal-backdrop-close"></div>
+    
+    <!-- Close button -->
+    <button class="btn-close-modal" id="btn-close-modal" title="Close details">
+      <ion-icon name="close-outline"></ion-icon>
+    </button>
+
     <div class="details-content">
+      <!-- Video Player Container (Renders inside the modal) -->
       <div class="video-player-container hidden" id="video-player-container">
         <div class="player-header">
           <span id="player-title">Playing...</span>
-          <button class="btn-close-player" id="close-player-btn"><i class="fas fa-times"></i></button>
+          <button class="btn-close-player" id="close-player-btn" title="Close player">
+            <ion-icon name="close-outline"></ion-icon>
+          </button>
         </div>
         <div class="player-iframe-wrapper">
           <iframe id="player-iframe" src="" allowfullscreen allow="autoplay; encrypted-media"></iframe>
         </div>
       </div>
+
       <div class="details-body">
+        <!-- Details Empty State -->
         <div class="details-empty" id="details-empty">
-          <i class="fas fa-info-circle"></i>
+          <ion-icon name="information-circle-outline"></ion-icon>
           <h3>Content Details</h3>
           <p>Select an item to view its synopsis, seasons, servers and download options.</p>
         </div>
-        <div class="details-content-inner hidden" id="details-content">
+
+        <!-- Details Content (Dynamic) -->
+        <div class="details-content-inner" id="details-content">
           <div class="details-header-card">
             <img id="details-poster" src="" alt="Poster" class="details-poster">
             <div class="details-meta-info">
               <span class="media-type-badge" id="details-type">MOVIE</span>
               <h3 id="details-title">Content Title</h3>
               <p id="details-original-title" class="subtext">Original Title</p>
+              
               <div class="meta-row">
-                <div class="meta-item year"><i class="fas fa-calendar"></i><span id="details-year">2024</span></div>
-                <div class="meta-item rating"><i class="fas fa-star"></i><span id="details-rating">8.5</span></div>
+                <div class="meta-item year">
+                  <ion-icon name="calendar-outline"></ion-icon>
+                  <span id="details-year">2024</span>
+                </div>
+                <div class="meta-item rating">
+                  <ion-icon name="star"></ion-icon>
+                  <span id="details-rating">8.5</span>
+                </div>
               </div>
-              <div class="details-genres" id="details-genres"></div>
+
+              <div class="details-genres" id="details-genres">
+                <!-- Genres badges populated dynamically -->
+              </div>
             </div>
           </div>
+
+          <!-- Synopsis -->
           <div class="details-section">
             <h4>Synopsis</h4>
             <p id="details-synopsis" class="synopsis-text">Full content synopsis...</p>
           </div>
+
+          <!-- Cast & Crew -->
           <div class="details-section meta-credits">
-            <p><strong>Director:</strong> <span id="details-director">Unknown</span></p>
+            <p><strong>Director:</strong> <span id="details-director">Matt Reeves</span></p>
           </div>
+
+          <!-- Seasons & Episodes (Series only) -->
           <div class="details-section hidden" id="seasons-section">
             <h4>Seasons & Episodes</h4>
-            <div class="seasons-tabs" id="seasons-tabs-container"></div>
-            <div class="episodes-grid" id="episodes-container"></div>
+            <div class="seasons-tabs" id="seasons-tabs-container">
+              <!-- Season buttons populated dynamically -->
+            </div>
+            <div class="episodes-grid" id="episodes-container">
+              <!-- Episode buttons populated dynamically -->
+            </div>
           </div>
+
+          <!-- Servers & Play Links -->
           <div class="details-section" id="servers-section">
             <h4 id="servers-section-title">Playback Servers</h4>
             <div class="loading-state hidden" id="servers-loading">
               <div class="spinner"></div>
               <p>Scraping episode servers...</p>
             </div>
-            <div class="servers-list" id="servers-container"></div>
+            <div class="servers-list" id="servers-container">
+              <!-- Server list rows populated dynamically -->
+            </div>
           </div>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- DOWNLOADS DRAWER -->
+  <!-- --- SLIDING DOWNLOADS DRAWER --- -->
   <div class="downloads-panel" id="downloads-drawer">
     <div class="downloads-header">
       <h2>Active Downloads</h2>
       <div class="downloads-header-actions">
+        <!-- Clear completed downloads button -->
         <button class="btn-icon" id="clear-completed-downloads" title="Clear completed/failed downloads">
-          <i class="fas fa-trash"></i>
+          <ion-icon name="trash-outline"></ion-icon>
         </button>
-        <button class="btn-icon" id="downloads-panel-close" title="Close manager">
-          <i class="fas fa-times"></i>
+        <!-- Close Drawer Button -->
+        <button class="downloads-panel-close" id="downloads-panel-close" title="Close manager">
+          <ion-icon name="close-outline"></ion-icon>
         </button>
       </div>
     </div>
+    
     <div class="downloads-list" id="downloads-container">
+      <!-- No active downloads empty state -->
       <div class="downloads-empty" id="downloads-empty">
-        <i class="fas fa-cloud-download-alt"></i>
-        <p>No active downloads at this moment.</p>
+        <ion-icon name="cloud-download-outline"></ion-icon>
+        <p>You have no active downloads at the moment.</p>
       </div>
     </div>
   </div>
 
-  <!-- Existing app.js remains untouched -->
   <script src="app.js"></script>
 </body>
 </html>
